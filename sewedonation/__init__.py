@@ -1,1 +1,1 @@
-default_app_config = 'sewedonation.apps.SewedonationConfig'
+default_app_config = "sewedonation.apps.SewedonationConfig"
