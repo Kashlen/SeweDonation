@@ -1,7 +1,5 @@
 from asyncio.windows_events import NULL
 from distutils.command.upload import upload
-import email
-from http.client import LENGTH_REQUIRED
 from tabnanny import verbose
 from tkinter import CASCADE
 from unicodedata import name
