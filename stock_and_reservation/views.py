@@ -19,7 +19,7 @@ def overview(request):
 
     items_list = ItemVariation.objects.all().order_by("saldo")
     three_lowest = items_list[0:3]
-    return render(request, "sewedonation/overview.html", {"three_lowest": three_lowest})
+    return render(request, "stock_and_reservation/overview.html", {"three_lowest": three_lowest})
 
 
 def registration(request):
@@ -44,14 +44,14 @@ def registration(request):
             user.contact_person = contact_person
             user.address = address
             user.save()
-            return render(request, "sewedonation/registration_succeed.html")
+            return render(request, "stock_and_reservation/registration_succeed.html")
     else:
         form = RegistrationForm()
-        return render(request, "sewedonation/registration.html", {"form": form})
+        return render(request, "stock_and_reservation/registration.html", {"form": form})
 
 
 def registration_succeed(request):
-    return render(request, "sewedonation/registration_succeed.html")
+    return render(request, "stock_and_reservation/registration_succeed.html")
 
 
 def log_out(

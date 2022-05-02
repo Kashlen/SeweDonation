@@ -29,7 +29,7 @@ class VariationAdmin(admin.ModelAdmin):
         "reserved_quantity",
         "saldo",
     )
-    list_filter = ("size",)
+    list_filter = ("size", "item")
 
 
 class ReservationAdmin(admin.ModelAdmin):

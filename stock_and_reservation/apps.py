@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class SewedonationConfig(AppConfig):
+class StockReservationConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "sewedonation"
+    name = "stock_and_reservation"
     verbose_name = "Ušij a daruj"

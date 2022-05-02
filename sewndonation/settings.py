@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "sewedonation",
+    "stock_and_reservation",
     "django_browser_reload",
 ]
 
@@ -73,7 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "sewndonation.wsgi.application"
 
-AUTH_USER_MODEL = "sewedonation.OrganisationProfile"
+AUTH_USER_MODEL = "stock_and_reservation.OrganisationProfile"
 
 INTERNAL_IPS = [
     "127.0.0.1",
