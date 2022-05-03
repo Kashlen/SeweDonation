@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
+    "django.contrib.sessions",  # TODO: Add 'django.contrib.sites'?
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "stock_and_reservation",
@@ -135,3 +135,10 @@ MEDIA_ROOT = BASE_DIR / "media/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# SMTP configuration
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "kdynsketvoreni@gmail.com"
+EMAIL_HOST_PASSWORD = "" # TODO: Once password available, take out the email verification from notes in views.py. / Assure security of input password. / (Continue 68.)
+EMAIL_USE_TLS = True

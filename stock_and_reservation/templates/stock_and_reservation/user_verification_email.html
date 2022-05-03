@@ -1,0 +1,11 @@
+{% autoescape off %}
+
+Dobrý den,
+
+právě jste zaregistrovali Vaši organizaci {{ user.organisation_name }} do rezervačního systému.
+Prosím, potvrďte Vaši registraci kliknutím na odkaz níže.
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+Pokud jste neprovedli tuto registraci, prosím, ignorujte tuto zprávu.
+
+{% endautoescape %}
