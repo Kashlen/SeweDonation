@@ -22,7 +22,7 @@
                     </div>
                 </div>  
                 <div class="col-lg-7 col-12 order-first order-lg-2 text-center align-self-center py-3">
-                    <div class="display-1 " style="font-family: 'Chicle', serif;">UŠIJ A DARUJ</div>
+                    <div class="display-1 " style="font-family: 'Chicle', serif;">UŠIJ A DARUJ</div>  <!--TODO: Create link to main page but without link look. --> 
                     <span style="position: relative; top: -10px">Přehled zásob a rezervační systém</span>
                 </div>
                 {% if user.id is None %}
@@ -54,6 +54,9 @@
                 {% endif %}
             </div>
         </div>
+        {% if user.id is not None %}
+        {% include 'stock_and_reservation/navbar.html' %}
+        {% endif %}
         <main class="my-4 bg-primary container">
         {% block content %}
         {% endblock %}

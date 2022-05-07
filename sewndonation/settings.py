@@ -140,5 +140,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "kdynsketvoreni@gmail.com"
-EMAIL_HOST_PASSWORD = "" # TODO: Once password available, take out the email verification from notes in views.py. / Assure security of input password. / (Continue 68.)
+EMAIL_HOST_PASSWORD = ""  # TODO: Once password available, take out the email verification from notes in views.py. / Assure security of input password. / (Continue 68.)
 EMAIL_USE_TLS = True

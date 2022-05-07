@@ -145,7 +145,7 @@ class Reservation(models.Model):
     created_at = models.DateTimeField(verbose_name="vytvořena dne", auto_created=True, default=timezone.now)
     updated_at = models.DateTimeField(verbose_name="upravena dne", default=timezone.now)
     item = models.ForeignKey(ItemVariation, on_delete=models.CASCADE, verbose_name="položka")
-    quantity = models.IntegerField(verbose_name="počet kusů")   
+    quantity = models.IntegerField(verbose_name="počet kusů")
 
     # TODO: Will may change once resolved ReservationForm. The quantity should be moved to reserved_quantity of ItemVariation (here item).
 

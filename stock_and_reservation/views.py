@@ -1,14 +1,17 @@
 from base64 import urlsafe_b64encode  # Used for verification e-mail - currently disabled, but still in code
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.tokens import \
-    default_token_generator  # Used for verification e-mail - currently disabled, but still in code
-from django.contrib.sites.shortcuts import \
-    get_current_site  # Used for verification e-mail - currently disabled, but still in code
+from django.contrib.auth.tokens import (
+    default_token_generator,
+)  # Used for verification e-mail - currently disabled, but still in code
+from django.contrib.sites.shortcuts import (
+    get_current_site,
+)  # Used for verification e-mail - currently disabled, but still in code
 from django.core.mail import EmailMessage  # Used for verification e-mail - currently disabled, but still in code
 from django.shortcuts import redirect, render
-from django.template.loader import \
-    render_to_string  # Used for verification e-mail - currently disabled, but still in code
+from django.template.loader import (
+    render_to_string,
+)  # Used for verification e-mail - currently disabled, but still in code
 from django.utils.encoding import force_bytes  # Used for verification e-mail - currently disabled, but still in code
 
 from .forms import RegistrationForm
@@ -55,7 +58,7 @@ def registration(request):
             user.address = address
             user.save()
 
-            # User activation - REQUIRES EMAIL PASSWORD IN SETTINGS (67, 17) - How to protect the password? TODO: Find out if loading from file is OK. 
+            # User activation - REQUIRES EMAIL PASSWORD IN SETTINGS (67, 17) - How to protect the password? TODO: Find out if loading from file is OK.
             # current_site = get_current_site(request)
             # mail_subject = "Prosím, aktivujte si svůj uživatelský účet na Ušij a daruj."
             # message = render_to_string('sewndonation/user_verification_email.html', {
