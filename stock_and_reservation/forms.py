@@ -22,6 +22,5 @@ class RegistrationForm(forms.ModelForm):
             self.fields[field].widget.attrs["class"] = "form-control"
 
 
-# class LogIn(forms.Form):
-#   username    = forms.EmailField
-#  password    = forms.PasswordInput
+class ReservationForm(forms.ModelForm):
+    pass

@@ -1,5 +1,41 @@
 {% extends 'stock_and_reservation/base.html' %}
 
 {% block content %}
-
+<div class="container pb-4">
+    Zde je přehled položek, které jsou aktuálně skladem. <b>Rezervovat lze větší množství, než je skladem</b>, avšak doba dodání pak závisí na množství chybějících kusů. Pro více informací nás kontaktujte na <a href = "mailto: kdynsketvoreni@gmail.com">kdynsketvoreni@gmail.com</a>. Děkujeme. 
+</div>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">POLOŽKA</th>
+                <th scope="col">VEL.</th>
+                <th scope="col">VZOR</th>
+                <th scope="col">STAV</th>
+                <th scope="col">REZERVOVAT</th>
+            </tr>
+        </thead>
+        <form class="row g-3" action="{% url 'stock' %}" method="POST">
+            {% csrf_token %}
+            <tbody>
+                {% for item in items_list %}
+                <tr>
+                <th scope="row"> {{ item }}</th>
+                <td>{{ item.size }}</td>
+                <td>{{ item.fabric_design }}</td>
+                <td class="text-end">{{ item.saldo }}</td>
+                <td>
+                    <input type="number" style="width:70px" class="form-control justify-content-center" id="reserved_quantity" name="reserved_quantity" value=0>
+                    <!-- TODO: Create ReservationForm? and then fill {{ form.reserved_quantity }} -->
+                </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </form>
+        </table>
+    </table>
+    <div class="col-12 text-center py-3">
+        <button type="submit" class="btn btn-outline-light bg-secondary btn-lg">ZAREZERVOVAT</button>
+    </div>
+</div>
 {% endblock %}

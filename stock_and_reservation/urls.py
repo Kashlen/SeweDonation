@@ -10,6 +10,7 @@ urlpatterns = [
     path("registration", views.registration, name="registration"),
     path("registration_succeed", views.registration_succeed, name="registration_succeed"),
     path("logout", views.log_out, name="log_out"),
+    path("stock", views.stock, name="stock"),
 ]
 
 if settings.DEBUG:

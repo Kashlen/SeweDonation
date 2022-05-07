@@ -86,6 +86,11 @@ def log_out(
     logout(request)
     return redirect("overview")
 
+
+def stock(request):
+    items_list = ItemVariation.objects.all().order_by('item', 'size')
+    return render(request, "stock_and_reservation/stock.html", {"items_list": items_list})
+
     # TODO: to be finished later in stock view:
     # def get_available_quantity(self):
     #   _ = self.on_stock - self.reserved_quantity

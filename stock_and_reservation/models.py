@@ -34,7 +34,9 @@ class ItemVariation(models.Model):
     fabric_design = models.CharField(choices=fabric_design_choice, max_length=50, verbose_name="vzor", blank=False)
     description = models.TextField(max_length=500, verbose_name="popis", blank=True)
     on_stock = models.PositiveIntegerField(verbose_name="na skladě")
-    reserved_quantity = models.IntegerField(verbose_name="rezervované množství")
+    reserved_quantity = models.IntegerField(
+        verbose_name="rezervované množství"
+    )  # TODO: Make coonection to reservations so quantity is automaticaly reloaded.
     saldo = models.IntegerField(blank=True, editable=False)
 
     class Meta:

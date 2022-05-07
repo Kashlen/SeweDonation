@@ -16,7 +16,7 @@
     <body class="bg-primary">
         <div class="container bg-secondary text-white rounded-bottom">
             <div class="row gx-3">
-                <div class="col-lg-2 col-5 order-lg-1">
+                <div class="col-lg-2 col-3 order-lg-1">
                     <div class="rounded-circle py-3 ps-3">
                     <a href="http://kdynsketvoreni.cz"><img class="rounded-circle img-fluid" src="{% static 'images/logo.jpg' %}"></a>
                     </div>
@@ -47,7 +47,6 @@
                     Přihlášená organizace:<br>
                     {{ user.organisation_name }}
                     <div class="pt-2">
-                        <a href="#" class="btn btn-outline-light btn-sm">Rezervační systém</a>
                         <a href="{% url 'log_out' %}" class="btn btn-outline-light btn-sm">Odhlásit se</a>
                     </div>
                 </div>
