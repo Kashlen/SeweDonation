@@ -136,20 +136,17 @@ status_choice = (
 
 class Reservation(models.Model):
     reservation_number = models.IntegerField(
-        verbose_name="rezervační číslo",
+        verbose_name="Rezervační číslo",
         primary_key=True,
         auto_created=True,
         editable=False,
         unique=True,
     )
     status = models.CharField(choices=status_choice, max_length=50, default="new")
-    organisation_name = models.ForeignKey(OrganisationProfile, on_delete=models.CASCADE, verbose_name="organizace")
-    created_at = models.DateTimeField(verbose_name="vytvořena dne", auto_created=True, default=timezone.now)
-    updated_at = models.DateTimeField(verbose_name="upravena dne", default=timezone.now)
-    item = models.ForeignKey(ItemVariation, on_delete=models.CASCADE, verbose_name="položka")
-    quantity = models.IntegerField(verbose_name="počet kusů")
-
-    # TODO: Will may change once resolved ReservationForm. The quantity should be moved to reserved_quantity of ItemVariation (here item).
+    organisation_name = models.ForeignKey(OrganisationProfile, on_delete=models.CASCADE, verbose_name="Organizace")
+    created_at = models.DateTimeField(verbose_name="Vytvořena dne", auto_created=True, default=timezone.now)
+    updated_at = models.DateTimeField(verbose_name="Upravena dne", default=timezone.now, blank=True)
+    reservation_note = models.TextField(max_length=500, verbose_name="Poznámka k rezervaci", blank=True)
 
     class Meta:
         verbose_name = "Rezervace"
@@ -157,3 +154,12 @@ class Reservation(models.Model):
 
     def __unicode__(self):
         return self.reservation_number
+
+
+class ReservedItem(models.Model):
+    item = models.ForeignKey(ItemVariation, on_delete=models.CASCADE, verbose_name='Rezervovaná položka')
+    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE, verbose_name='Rezervace')
+    quantity = models.IntegerField(verbose_name="Počet kusů")
+
+    def __str__(self):
+        return self.item

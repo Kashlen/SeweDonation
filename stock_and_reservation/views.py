@@ -1,4 +1,5 @@
-from base64 import urlsafe_b64encode  # Used for verification e-mail - currently disabled, but still in code
+from base64 import urlsafe_b64encode
+from dataclasses import field  # Used for verification e-mail - currently disabled, but still in code
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.tokens import (
@@ -12,10 +13,10 @@ from django.shortcuts import redirect, render
 from django.template.loader import (
     render_to_string,
 )  # Used for verification e-mail - currently disabled, but still in code
-from django.utils.encoding import force_bytes  # Used for verification e-mail - currently disabled, but still in code
+from django.utils.encoding import force_bytes  # Used for verification e-mail - currently disabled, but still in code 
 
-from .forms import RegistrationForm
-from .models import ItemVariation, OrganisationProfile
+from .forms import RegistrationForm, ReservationForm
+from .models import ItemVariation, OrganisationProfile, Reservation
 
 
 def overview(request):
@@ -36,7 +37,7 @@ def overview(request):
 
 
 def registration(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = RegistrationForm(request.POST)  #  It will contain all field values.
         if form.is_valid():  #  It means all required fields are filled in.
             organisation_name = form.cleaned_data["organisation_name"]
@@ -91,13 +92,16 @@ def stock(request):
     items_list = ItemVariation.objects.all().order_by('item', 'size')
     return render(request, "stock_and_reservation/stock.html", {"items_list": items_list})
 
-    # TODO: to be finished later in stock view:
-    # def get_available_quantity(self):
-    #   _ = self.on_stock - self.reserved_quantity
-    #  if _ <= 0:
-    #        available_quantity = 0
-    #   else:
-    #      available_quantity = _
-    # return available_quantity
-
-    # available_quantity = self.get_available_quantity()
+def make_reservation(request):
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            reservation = Reservation() #form.save(commit=False)
+            reservation.organisation_name = request.user
+            reservation.reservation_note = form.cleaned_data["reservation_note"]
+            #reservation.reservation_item =  TODO: finish/connect
+            reservation.quantity = form.cleaned_data['quantity']
+            reservation.save()
+            return redirect('stock')
+    else:
+        return redirect('stock')

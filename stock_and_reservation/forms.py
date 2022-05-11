@@ -1,5 +1,5 @@
 from django import forms
-from .models import OrganisationProfile
+from .models import OrganisationProfile, Reservation, ReservedItem
 
 
 class RegistrationForm(forms.ModelForm):
@@ -7,14 +7,14 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = OrganisationProfile
-        fields = (
+        fields = [
             "organisation_name",
             "contact_person",
             "phone",
             "email",
             "password",
             "address",
-        )
+        ]
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
@@ -23,4 +23,16 @@ class RegistrationForm(forms.ModelForm):
 
 
 class ReservationForm(forms.ModelForm):
-    pass
+
+    class Meta:
+        model = Reservation
+        fields = ['reservation_note']
+
+
+class ReservedItemsForm(forms.ModelForm):
+
+    class Meta:
+        model = ReservedItem
+        fields = ['quantity']
+    
+

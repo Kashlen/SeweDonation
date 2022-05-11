@@ -15,12 +15,12 @@
                 <th scope="col">REZERVOVAT</th>
             </tr>
         </thead>
-        <form class="row g-3" action="{% url 'stock' %}" method="POST">
+        <form class="row g-3" action="{% url 'make_reservation' %}" method="POST">
             {% csrf_token %}
             <tbody>
                 {% for item in items_list %}
                 <tr>
-                <th scope="row"> {{ item }}</th>
+                <th scope="row"> {{ item.item }}</th>
                 <td>{{ item.size }}</td>
                 <td>{{ item.fabric_design }}</td>
                 <td class="text-end">{{ item.saldo }}</td>
