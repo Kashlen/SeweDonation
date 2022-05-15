@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Item, ItemVariation, OrganisationProfile, Reservation
+from .models import Item, ItemVariation, OrganisationProfile, Reservation, ReservedItem
 
 
 class AccountAdmin(UserAdmin):
@@ -36,9 +36,13 @@ class ReservationAdmin(admin.ModelAdmin):
     list_display = ("reservation_number", "status", "created_at")
 
 
+class ReservedItemAdmin(admin.ModelAdmin):
+    list_display = ("item", "quantity", "reservation_number")
+
 # Register your models here.
 
 admin.site.register(Item)
 admin.site.register(ItemVariation, VariationAdmin)
 admin.site.register(OrganisationProfile, AccountAdmin)
 admin.site.register(Reservation, ReservationAdmin)
+admin.site.register(ReservedItem, ReservedItemAdmin)

@@ -11,7 +11,6 @@ urlpatterns = [
     path("registration_succeed", views.registration_succeed, name="registration_succeed"),
     path("logout", views.log_out, name="log_out"),
     path("stock", views.stock, name="stock"),
-    path('make_reservation', views.make_reservation, name='make_reservation'),
 ]
 
 if settings.DEBUG:

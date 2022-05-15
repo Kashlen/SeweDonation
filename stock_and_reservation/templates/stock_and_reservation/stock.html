@@ -5,37 +5,44 @@
     Zde je přehled položek, které jsou aktuálně skladem. <b>Rezervovat lze větší množství, než je skladem</b>, avšak doba dodání pak závisí na množství chybějících kusů. Pro více informací nás kontaktujte na <a href = "mailto: kdynsketvoreni@gmail.com">kdynsketvoreni@gmail.com</a>. Děkujeme. 
 </div>
 <div>
-    <table class="table">
-        <thead>
+    <form action="{% url 'stock' %}" method="post">
+        {% csrf_token %}
+        <table class="table">
+            <thead>
             <tr>
-                <th scope="col">POLOŽKA</th>
-                <th scope="col">VEL.</th>
-                <th scope="col">VZOR</th>
-                <th scope="col">STAV</th>
-                <th scope="col">REZERVOVAT</th>
+                <th class="text-uppercase" scope="col">Položka</th>
+                <th class="text-uppercase" scope="col">Vel.</th>
+                <th class="text-uppercase" scope="col">Vzor</th>
+                <th class="text-uppercase" scope="col">Stav</th>
+                <th class="text-uppercase" scope="col">Rezervovat</th>
             </tr>
-        </thead>
-        <form class="row g-3" action="{% url 'make_reservation' %}" method="POST">
-            {% csrf_token %}
+            </thead>
             <tbody>
-                {% for item in items_list %}
+            {% for item in items_list %}
                 <tr>
-                <th scope="row"> {{ item.item }}</th>
-                <td>{{ item.size }}</td>
-                <td>{{ item.fabric_design }}</td>
-                <td class="text-end">{{ item.saldo }}</td>
-                <td>
-                    <input type="number" style="width:70px" class="form-control justify-content-center" id="reserved_quantity" name="reserved_quantity" value=0>
-                    <!-- TODO: Create ReservationForm? and then fill {{ form.reserved_quantity }} -->
-                </td>
+                    <th scope="row"> {{ item.item }}</th>
+                    <td>{{ item.size }}</td>
+                    <td>{{ item.fabric_design }}</td>
+                    <td class="text-center">{{ item.saldo }}</td>
+                    <td>
+                        {{ formset.management_form }}
+                        {% for reserved_item in formset %}
+                        <label for="quantity" class="form-label"></label>
+                        {{ reserved_item.quantity }}
+                        {{ reserved_item.item }} 
+                        {% endfor %}
+                    </td>
                 </tr>
-                {% endfor %}
+            {% endfor %}
             </tbody>
-        </form>
         </table>
-    </table>
-    <div class="col-12 text-center py-3">
-        <button type="submit" class="btn btn-outline-light bg-secondary btn-lg">ZAREZERVOVAT</button>
-    </div>
+        <div class="mb-3 text-center">
+            <label for="reservation_note" class="form-label">Poznámka k rezervaci</label>
+            <div>{{ form.reservation_note }}</div>
+            <button type="submit" class="btn btn-outline-light bg-secondary btn-lg text-uppercase my-3">
+                Zarezervovat
+            </button>
+        </div>
+    </form>
 </div>
 {% endblock %}

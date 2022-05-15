@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
-from django.utils import timezone
+from django.core.validators import MinValueValidator 
 
 
 # ITEMS
@@ -40,8 +40,8 @@ class ItemVariation(models.Model):
     saldo = models.IntegerField(blank=True, editable=False)
 
     class Meta:
-        verbose_name = "Varianta"
-        verbose_name_plural = "Varianty"
+        verbose_name = "Varianta položky"
+        verbose_name_plural = "Varianty položek"
 
     def __str__(self):
         return self.item.item_name + " (vel. " + self.size + ", vzor " + self.fabric_design + ")"
@@ -130,7 +130,8 @@ status_choice = (
     ("new", "nová"),
     ("in progress", "rozpracovaná"),
     ("completed", "připravená k odeslání"),
-    ("closed", "uzavřená"),
+    ("sent", "odeslaná"),
+    ("cancelled", "zrušená"),
 )
 
 
@@ -144,22 +145,29 @@ class Reservation(models.Model):
     )
     status = models.CharField(choices=status_choice, max_length=50, default="new")
     organisation_name = models.ForeignKey(OrganisationProfile, on_delete=models.CASCADE, verbose_name="Organizace")
-    created_at = models.DateTimeField(verbose_name="Vytvořena dne", auto_created=True, default=timezone.now)
-    updated_at = models.DateTimeField(verbose_name="Upravena dne", default=timezone.now, blank=True)
-    reservation_note = models.TextField(max_length=500, verbose_name="Poznámka k rezervaci", blank=True)
+    created_at = models.DateTimeField(verbose_name="Vytvořena dne", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="Upravena dne", auto_now=True)
+    reservation_note = models.CharField(verbose_name="Poznámka k rezervaci", max_length=1000, blank=True)
 
     class Meta:
         verbose_name = "Rezervace"
         verbose_name_plural = "Rezervace"
 
-    def __unicode__(self):
-        return self.reservation_number
+    def __str__(self):
+        return "Rezervace č. " + str(self.reservation_number)
 
 
 class ReservedItem(models.Model):
     item = models.ForeignKey(ItemVariation, on_delete=models.CASCADE, verbose_name='Rezervovaná položka')
-    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE, verbose_name='Rezervace')
-    quantity = models.IntegerField(verbose_name="Počet kusů")
+    reservation_number = models.ForeignKey(Reservation, on_delete=models.CASCADE, verbose_name='Rezervace')
+    quantity = models.PositiveIntegerField(verbose_name="Počet kusů", validators=[MinValueValidator(1),])  # TODO: Check if the default valaue works well for me.
+    # TODO: Is it need to add organisation_name or is it enough to get it from reservation_number? The same for color and fabrique design?
+
+    class Meta:
+        verbose_name = "Rezervovaná položka"
+        verbose_name_plural = "Rezervované položky"
 
     def __str__(self):
-        return self.item
+        return str(self.item.item) + " (vel. " + str(self.item.size) + ", " + str(self.item.fabric_design) + ")"
+
+    

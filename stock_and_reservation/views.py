@@ -15,8 +15,8 @@ from django.template.loader import (
 )  # Used for verification e-mail - currently disabled, but still in code
 from django.utils.encoding import force_bytes  # Used for verification e-mail - currently disabled, but still in code 
 
-from .forms import RegistrationForm, ReservationForm
-from .models import ItemVariation, OrganisationProfile, Reservation
+from .forms import RegistrationForm, ReservationForm, ReservedItemsFormSet
+from .models import ItemVariation, OrganisationProfile, ReservedItem
 
 
 def overview(request):
@@ -90,18 +90,25 @@ def log_out(
 
 def stock(request):
     items_list = ItemVariation.objects.all().order_by('item', 'size')
-    return render(request, "stock_and_reservation/stock.html", {"items_list": items_list})
-
-def make_reservation(request):
     if request.method == 'POST':
         form = ReservationForm(request.POST)
-        if form.is_valid():
-            reservation = Reservation() #form.save(commit=False)
+        formset = ReservedItemsFormSet(request.POST)
+        if form.is_valid() and formset.is_valid:  # TODO: Set validation somehow - it is possible to create reservation even without corresponding reserved items. This shouldn't happen.
+            reservation = form.save(commit=False)
+            reservation.reservation_note = form.cleaned_data['reservation_note']
             reservation.organisation_name = request.user
-            reservation.reservation_note = form.cleaned_data["reservation_note"]
-            #reservation.reservation_item =  TODO: finish/connect
-            reservation.quantity = form.cleaned_data['quantity']
             reservation.save()
-            return redirect('stock')
+            reserved_items = formset.save(commit=False)
+            for reserved_item in reserved_items:
+                # if one_item.quantity > 0: TODO: Move the logic to the model. - Done but cannot be checked till it won't start work. :)
+                reserved_item.item = formset.cleaned_data['item'] # TODO: How it is possible to use form field name???
+                reserved_item.reservation_number = reservation.reservation_number
+                reserved_item.quantity = formset.cleaned_data['quantity']
+                reserved_item.save()
+            return render(request, "stock_and_reservation/stock.html", {"items_list": items_list, 'form': form, 'formset': formset}) # TODO: May redirect to list of reservations or reservation detail. / Once created these pages.
     else:
-        return redirect('stock')
+        form = ReservationForm()
+        formset = ReservedItemsFormSet()
+    return render(request, "stock_and_reservation/stock.html", {"items_list": items_list, 'form': form, 'formset': formset})
+
+

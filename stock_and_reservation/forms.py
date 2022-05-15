@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import modelformset_factory
 from .models import OrganisationProfile, Reservation, ReservedItem
 
 
@@ -29,10 +30,12 @@ class ReservationForm(forms.ModelForm):
         fields = ['reservation_note']
 
 
-class ReservedItemsForm(forms.ModelForm):
+class ReservedItemsForm(forms.ModelForm):  # TODO: To be deleted if ReservedItemsFormSet works - no need to have it (I think).
+    item = forms.CharField(widget=forms.HiddenInput())
 
     class Meta:
         model = ReservedItem
-        fields = ['quantity']
+        fields = ['item', 'quantity']
     
-
+ReservedItemsFormSet = modelformset_factory(ReservedItem, fields=["item", "quantity"])  # TODO: If doesn't work, write back `ReservedItemsForm`.
+    
