@@ -1,5 +1,5 @@
+from tkinter import HIDDEN
 from django import forms
-from django.forms import modelformset_factory
 from .models import OrganisationProfile, Reservation, ReservedItem
 
 
@@ -30,12 +30,15 @@ class ReservationForm(forms.ModelForm):
         fields = ['reservation_note']
 
 
-class ReservedItemsForm(forms.ModelForm):  # TODO: To be deleted if ReservedItemsFormSet works - no need to have it (I think).
-    item = forms.CharField(widget=forms.HiddenInput())
+class ReservedItemsForm(forms.ModelForm):
+    item_id = forms.IntegerField(widget=forms.HiddenInput())
+    quantity = forms.IntegerField()
 
     class Meta:
         model = ReservedItem
-        fields = ['item', 'quantity']
-    
-ReservedItemsFormSet = modelformset_factory(ReservedItem, fields=["item", "quantity"])  # TODO: If doesn't work, write back `ReservedItemsForm`.
-    
+        fields = ['quantity']
+
+   # def clean(self):
+        #cleaned_data = super(ReservedItemsForm, self).clean()
+        #for i, quantity in enumerate(cleaned_data):
+        #return cleaned_data

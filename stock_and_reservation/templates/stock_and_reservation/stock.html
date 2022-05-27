@@ -18,19 +18,17 @@
             </tr>
             </thead>
             <tbody>
-            {% for item in items_list %}
+            {{ formset.management_form }}
+            {% for reserved_item_form in formset %}
                 <tr>
-                    <th scope="row"> {{ item.item }}</th>
-                    <td>{{ item.size }}</td>
-                    <td>{{ item.fabric_design }}</td>
-                    <td class="text-center">{{ item.saldo }}</td>
+                   <td>{{ reserved_item_form.item_id.value }}</td>
+                   {# <td>{{ item.size }}</td>#}
+                   {#<td>{{ item.fabric_design }}</td>#}
+                   {#<td class="text-center">{{ item.saldo }}</td>#}
                     <td>
-                        {{ formset.management_form }}
-                        {% for reserved_item in formset %}
-                        <label for="quantity" class="form-label"></label>
-                        {{ reserved_item.quantity }}
-                        {{ reserved_item.item }} 
-                        {% endfor %}
+                        
+                        {{ reserved_item_form.quantity }} 
+                        {{ reserved_item_form.item_id }}
                     </td>
                 </tr>
             {% endfor %}

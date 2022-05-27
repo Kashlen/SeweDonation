@@ -15,7 +15,8 @@ from django.template.loader import (
 )  # Used for verification e-mail - currently disabled, but still in code
 from django.utils.encoding import force_bytes  # Used for verification e-mail - currently disabled, but still in code 
 
-from .forms import RegistrationForm, ReservationForm, ReservedItemsFormSet
+from django.forms import formset_factory
+from .forms import RegistrationForm, ReservationForm, ReservedItemsForm
 from .models import ItemVariation, OrganisationProfile, ReservedItem
 
 
@@ -92,23 +93,33 @@ def stock(request):
     items_list = ItemVariation.objects.all().order_by('item', 'size')
     if request.method == 'POST':
         form = ReservationForm(request.POST)
-        formset = ReservedItemsFormSet(request.POST)
-        if form.is_valid() and formset.is_valid:  # TODO: Set validation somehow - it is possible to create reservation even without corresponding reserved items. This shouldn't happen.
+        ReservedItemsFormSet = formset_factory(ReservedItemsForm)
+        formset = ReservedItemsFormSet(request.POST, request.FILES)
+        if form.is_valid() and formset.is_valid():
+              # TODO: Set validation somehow - it is possible to create reservation even without corresponding reserved items. This shouldn't happen.
             reservation = form.save(commit=False)
             reservation.reservation_note = form.cleaned_data['reservation_note']
             reservation.organisation_name = request.user
             reservation.save()
-            reserved_items = formset.save(commit=False)
-            for reserved_item in reserved_items:
-                # if one_item.quantity > 0: TODO: Move the logic to the model. - Done but cannot be checked till it won't start work. :)
-                reserved_item.item = formset.cleaned_data['item'] # TODO: How it is possible to use form field name???
-                reserved_item.reservation_number = reservation.reservation_number
-                reserved_item.quantity = formset.cleaned_data['quantity']
+            for index, reserved_item_form in enumerate(formset):
+                print(str(index+1) + ". kolo")
+                if not reserved_item_form.cleaned_data.get('quantity'):
+                    continue
+                item = items_list[index]
+                quantity = reserved_item_form.cleaned_data['quantity']
+                reserved_item = ReservedItem.objects.create(
+                    item=item,
+                    reservation_number=reservation,
+                    quantity=quantity,
+                )
                 reserved_item.save()
+                print('uloženo')
             return render(request, "stock_and_reservation/stock.html", {"items_list": items_list, 'form': form, 'formset': formset}) # TODO: May redirect to list of reservations or reservation detail. / Once created these pages.
     else:
         form = ReservationForm()
-        formset = ReservedItemsFormSet()
+        ReservedItemsFormSet = formset_factory(ReservedItemsForm)
+        print([{'item_id': str(item.id), 'quantity': 0} for item in items_list])
+        formset = ReservedItemsFormSet(initial=[{'item_id': str(item.id), 'quantity': 0} for item in items_list])
     return render(request, "stock_and_reservation/stock.html", {"items_list": items_list, 'form': form, 'formset': formset})
 
 

@@ -136,11 +136,11 @@ status_choice = (
 
 
 class Reservation(models.Model):
-    reservation_number = models.IntegerField(
+    reservation_number = models.AutoField(
         verbose_name="Rezervační číslo",
         primary_key=True,
-        auto_created=True,
-        editable=False,
+        #auto_created=True,
+        #editable=False,
         unique=True,
     )
     status = models.CharField(choices=status_choice, max_length=50, default="new")
@@ -160,7 +160,7 @@ class Reservation(models.Model):
 class ReservedItem(models.Model):
     item = models.ForeignKey(ItemVariation, on_delete=models.CASCADE, verbose_name='Rezervovaná položka')
     reservation_number = models.ForeignKey(Reservation, on_delete=models.CASCADE, verbose_name='Rezervace')
-    quantity = models.PositiveIntegerField(verbose_name="Počet kusů", validators=[MinValueValidator(1),])  # TODO: Check if the default valaue works well for me.
+    quantity = models.IntegerField(verbose_name="Počet kusů")
     # TODO: Is it need to add organisation_name or is it enough to get it from reservation_number? The same for color and fabrique design?
 
     class Meta:
